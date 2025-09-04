@@ -1,6 +1,6 @@
 package com.oliverastell.pixeleditor.util.selection
 
-import com.oliverastell.pixeleditor.util.vector.Vec2
+import com.oliverastell.pixeleditor.util.deprecated_vector.Vec2
 import kotlin.math.PI
 import kotlin.random.Random
 

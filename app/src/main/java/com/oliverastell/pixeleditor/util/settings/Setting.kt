@@ -1,5 +1,9 @@
 package com.oliverastell.pixeleditor.util.settings
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
@@ -39,33 +43,33 @@ interface Setting<T : Any> {
 
     companion object {
         fun number(default: Double) = object : NumberSetting {
-            override var rawValue = default
+            override var rawValue by mutableDoubleStateOf(default)
 
             override fun constrain(value: Double) = value
         }
 
         fun wholeNumber(default: Int) = object : NumberSetting {
-            override var rawValue = default.toDouble()
+            override var rawValue by mutableDoubleStateOf(default.toDouble())
 
             override fun constrain(value: Double) = value
         }
 
         fun clampedNumber(default: Double, range: ClosedFloatingPointRange<Double>) = object : ClampedNumberSetting {
-            override var rawValue = default
+            override var rawValue by mutableDoubleStateOf(default)
             override val range = range
 
-            override fun constrain(value: Double) = value
+            override fun constrain(value: Double) = value.coerceIn(range)
         }
 
-        fun clampedWholeNumber(default: Double, range: ClosedFloatingPointRange<Double>) = object : ClampedWholeNumberSetting {
-            override var rawValue = default
-            override val range = range
+        fun clampedWholeNumber(default: Int, range: IntRange) = object : ClampedWholeNumberSetting {
+            override var rawValue by mutableDoubleStateOf(default.toDouble())
+            override val range = range.start.toDouble()..range.endInclusive.toDouble()
 
-            override fun constrain(value: Double) = value
+            override fun constrain(value: Double) = value.coerceIn(this.range)
         }
 
         fun color(default: Color) = object : ColorSetting {
-            override var rawValue = default
+            override var rawValue by mutableStateOf(default)
 
             override fun constrain(value: Color) = value
         }

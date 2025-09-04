@@ -16,6 +16,10 @@ euclidGeometry = "0.22.5"
 polyboolJava = "1.0.1"
 luakt = "2.6.1"
 luajJse = "3.0.1"
+coilCompose = "3.3.0"
+coilNetworkOkhttp = "3.2.0"
+coilComposeVersion = "3.2.0"
+accompanistDrawablepainter = "0.37.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +48,10 @@ euclid-geometry = { group = "us.ihmc", name = "euclid-geometry", version.ref = "
 polybool-java = { group = "com.menecats", name = "polybool-java", version.ref = "polyboolJava" }
 luakt = { group = "com.github.only52607.luakt", name = "luakt", version.ref = "luakt" }
 luaj-jse = { group = "org.luaj", name = "luaj-jse", version.ref = "luajJse" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilCompose" }
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coilNetworkOkhttp" }
+coil3-coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilComposeVersion" }
+accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanistDrawablepainter" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

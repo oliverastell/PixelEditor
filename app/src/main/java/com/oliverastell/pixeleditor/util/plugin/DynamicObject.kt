@@ -1,5 +1,6 @@
 package com.oliverastell.pixeleditor.util.plugin
 
+import com.oliverastell.pixeleditor.util.AppState
 import com.oliverastell.pixeleditor.util.Identifier
 import com.oliverastell.pixeleditor.util.plugin.lua.LuaServer
 import com.oliverastell.pixeleditor.util.plugin.Sandboxed

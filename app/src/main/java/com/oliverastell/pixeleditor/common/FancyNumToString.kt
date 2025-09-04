@@ -3,4 +3,4 @@ package com.oliverastell.pixeleditor.common
 import java.text.DecimalFormat
 
 val df = DecimalFormat("#.###")
-fun Number.toFancyString() = df.format(this)
+fun Number.toFancyString(): String = df.format(this)

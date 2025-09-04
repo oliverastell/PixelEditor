@@ -1,92 +1,64 @@
 package com.oliverastell.pixeleditor.util
 
-import android.graphics.Bitmap
-import android.util.Log
-import androidx.compose.runtime.Stable
+import android.graphics.Canvas
+import android.graphics.Paint
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.graphics.createBitmap
-import com.oliverastell.pixeleditor.util.collections.ColorArray
-import com.oliverastell.pixeleditor.util.collections.toInt
-import java.nio.IntBuffer
+import com.oliverastell.pixeleditor.common.BitmapEditor
+import com.oliverastell.pixeleditor.common.toInt
 
-// borrowed from https://stackoverflow.com/a/70454857
-fun androidBitmapFormatRGBA8888(color: Int): Int {
-    val a = (color shr 24) and 255
-    val r = (color shr 16) and 255
-    val g = (color shr 8) and 255
-    val b = color and 255
+class Layer(val editor: Editor, defaultOpacity: Float = 1f, defaultBlend: BlendMode = BlendMode.SrcOver) {
+    private val bitmap = createBitmap(editor.width, editor.height)
+    private val canvas = BitmapEditor(bitmap)
 
-    return (a shl 24) or (b shl 16) or (g shl 8) or r
-}
+    var opacity by mutableFloatStateOf(defaultOpacity)
+    var blendMode by mutableStateOf(defaultBlend)
+    var version by mutableIntStateOf(0)
 
-@Stable
-data class Layer(
-    val width: Int,
-    val height: Int,
-    val opacity: Float = 1F,
-    val blendMode: BlendMode = BlendMode.SrcOver,
-    private val version: Int = 0, // this is just a hacky way to make compose see this as a different item
-    private val colors: ColorArray
-) {
-    private val buffer = IntBuffer.allocate(colors.size)
+    fun asBitmap() = bitmap
+    fun asImageBitmap() = bitmap.asImageBitmap()
 
-    constructor(
-        width: Int,
-        height: Int,
-        opacity: Float = 1F,
-        blendMode: BlendMode = BlendMode.SrcOver,
-        version: Int = 0,
-    ): this(width, height, opacity, blendMode, version, ColorArray(width*height))
+    operator fun get(x: Int, y: Int) = Color(bitmap.getPixel(x, y))
+    operator fun set(x: Int, y: Int, color: Color) = bitmap.setPixel(x, y, color.toInt())
 
-    operator fun get(
-        x: Int,
-        y: Int
-    ): Color = colors[x+y*width]
-
-    /**
-     * This will not trigger a recomposition.
-     */
-    fun setColorAt(x: Int, y: Int, color: Color) {
-        colors[x+y*width] = color
+    fun drawCircle(x: Float, y: Float, radius: Float, paint: Paint) {
+        canvas.drawCircle(
+            x,
+            y,
+            radius,
+            paint
+        )
+        editor.notifyCanvasChange()
     }
 
-    /**
-     * Please note this does mutate the underlying list for performance reasons.
-     * It's not ideal, but we're working with what Jetpack Compose will let us.
-     */
-    fun withColorAt(
-        x: Int,
-        y: Int,
-        color: Color
-    ): Layer {
-        if (x < 0 || x >= width || y < 0 || y >= height)
-            return this
-        setColorAt(x, y, color)
-        return Layer(width, height, opacity, blendMode, version+1, colors)
+    fun drawSquare(x: Float, y: Float, radius: Float, paint: Paint) {
+        canvas.drawRect(
+            x-radius/2,
+            y-radius/2,
+            x+radius/2,
+            y+radius/2,
+            paint
+        )
+        editor.notifyCanvasChange()
     }
 
-    fun withOpacity(opacity: Float) =
-        Layer(width, height, opacity, blendMode, version+1)
-
-    fun withBlendMode(blendMode: BlendMode) =
-        Layer(width, height, opacity, blendMode, version+1)
-
-    fun toImageBitmap(): ImageBitmap {
-        val bitmap = createBitmap(width, height, Bitmap.Config.ARGB_8888)
-
-        buffer.rewind()
-        for (color in colors) {
-            // For some reason bitmaps store their colors as ABGR instead of ARGB for some odd reason
-            //   here's the fix
-            buffer.put(androidBitmapFormatRGBA8888(color.toInt()))
-        }
-        buffer.rewind()
-
-        bitmap.copyPixelsFromBuffer(buffer)
-
-        return bitmap.asImageBitmap()
+    fun drawLine(ax: Float, ay: Float, bx: Float, by: Float, radius: Float = 1f, paint: Paint) {
+        canvas.drawLine(
+            ax,
+            ay,
+            bx,
+            by,
+            paint.apply {
+                strokeWidth = radius * 2
+            }
+        )
+        editor.notifyCanvasChange()
     }
 }

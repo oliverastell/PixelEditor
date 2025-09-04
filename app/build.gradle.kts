@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.oliverastell.pixeleditor"
-        minSdk = 28
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.ktoml.file)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.luaj.jse)
+    implementation(libs.accompanist.drawablepainter)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

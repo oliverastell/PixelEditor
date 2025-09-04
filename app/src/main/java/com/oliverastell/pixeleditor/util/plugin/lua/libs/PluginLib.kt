@@ -1,5 +1,6 @@
 package com.oliverastell.pixeleditor.util.plugin.lua.libs
 
+import com.oliverastell.pixeleditor.util.AppState
 import com.oliverastell.pixeleditor.util.Loader
 import com.oliverastell.pixeleditor.util.Identifier
 import com.oliverastell.pixeleditor.util.plugin.DynamicObjects.dynamic
@@ -18,8 +19,8 @@ class PluginLib(val plugin: Plugin) : TwoArgFunction() {
     ): LuaValue {
         val globals = env.checkglobals()
 
-        globals.set("loader", plugin.loader.dynamic().toLua())
-        globals.set("plugin", plugin.dynamic().toLua())
+//        globals.set("loader", plugin.loader.dynamic().toLua())
+//        globals.set("plugin", plugin.dynamic().toLua())
         globals.set("import", import)
         globals.set("require", NIL)
 
@@ -33,6 +34,6 @@ class PluginLib(val plugin: Plugin) : TwoArgFunction() {
         val identifier = Identifier.fromString(plugin.namespace, modulePath)
         val fullAccess = plugin.namespace == identifier.namespace
 
-        LTLazyImport(plugin.loader, fullAccess, identifier, forceInit)
+        LTLazyImport(plugin.appState, fullAccess, identifier, forceInit)
     }
 }

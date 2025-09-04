@@ -1,7 +1,7 @@
 package com.oliverastell.pixeleditor.util.selection
 
 import com.oliverastell.pixeleditor.util.Editor
-import com.oliverastell.pixeleditor.util.vector.Vec2
+import com.oliverastell.pixeleditor.util.deprecated_vector.Vec2
 import org.junit.Assert
 import org.junit.Test
 

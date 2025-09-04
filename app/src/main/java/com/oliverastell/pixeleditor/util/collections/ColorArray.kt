@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.ColorSpace
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
 
+/*
 @OptIn(ExperimentalUnsignedTypes::class)
 @JvmInline
 value class ColorArray(val backingArray: ULongArray) : Collection<Color> {
@@ -34,6 +35,4 @@ value class ColorArray(val backingArray: ULongArray) : Collection<Color> {
     operator fun get(index: Int) = Color(backingArray[index])
     operator fun set(index: Int, color: Color) { backingArray[index] = color.value }
 }
-
-fun Color.toULong() = this.value
-fun Color.toInt() = (this.convert(ColorSpaces.Srgb).value shr 32).toInt()
+*/

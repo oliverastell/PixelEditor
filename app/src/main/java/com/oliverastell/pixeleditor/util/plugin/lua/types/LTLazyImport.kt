@@ -1,5 +1,6 @@
 package com.oliverastell.pixeleditor.util.plugin.lua.types
 
+import com.oliverastell.pixeleditor.util.AppState
 import com.oliverastell.pixeleditor.util.Loader
 import com.oliverastell.pixeleditor.util.Identifier
 import com.oliverastell.pixeleditor.util.nothing
@@ -7,18 +8,18 @@ import com.oliverastell.pixeleditor.util.plugin.DynamicObject
 import com.oliverastell.pixeleditor.util.plugin.lua.toLua
 import org.luaj.vm2.LuaValue
 
-class LTLazyImport(val loader: Loader, val fullAccess: Boolean, val identifier: Identifier, val forceInit: Boolean) : LTDeferred() {
+class LTLazyImport(val appState: AppState, val fullAccess: Boolean, val identifier: Identifier, val forceInit: Boolean) : LTDeferred() {
     val pluginsAreInitialized: Boolean
-        get() = loader.pluginsAreInitialized
+        get() = appState.loader.pluginsAreInitialized
 
     val module: DynamicObject<*> by lazy {
         val plugin = if (forceInit) {
-            loader.getOrLoadPlugin(identifier.namespace)
+            appState.loader.getOrLoadPlugin(appState, identifier.namespace)
         } else {
             if (!pluginsAreInitialized)
                 return@lazy nothing { error("imported value may not yet be initialized") }
 
-            loader.getPlugin(identifier.namespace) ?: nothing { error("plugin ${identifier.namespace} doesn't exist") }
+            appState.loader.getPlugin(identifier.namespace) ?: nothing { error("plugin ${identifier.namespace} doesn't exist") }
         }
 
         if (fullAccess) {
@@ -44,7 +45,7 @@ class LTLazyImport(val loader: Loader, val fullAccess: Boolean, val identifier: 
             deferredTo.get(key)
         } else {
             LTLazyImport(
-                loader,
+                appState,
                 fullAccess,
                 Identifier(
                     identifier.namespace,

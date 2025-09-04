@@ -4,9 +4,9 @@ import androidx.collection.MutableDoubleList
 import androidx.collection.mutableDoubleListOf
 import com.oliverastell.pixeleditor.util.Editor
 import com.oliverastell.pixeleditor.util.collections.BitMatrix
-import com.oliverastell.pixeleditor.util.vector.Vec2
-import com.oliverastell.pixeleditor.util.vector.ceil
-import com.oliverastell.pixeleditor.util.vector.floor
+import com.oliverastell.pixeleditor.util.deprecated_vector.Vec2
+import com.oliverastell.pixeleditor.util.deprecated_vector.ceil
+import com.oliverastell.pixeleditor.util.deprecated_vector.floor
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
